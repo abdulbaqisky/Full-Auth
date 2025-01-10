@@ -28,6 +28,11 @@ app.use(session({
 app.use(flash())
 
 app.use(function(req, res, next){
+    res.locals.user = req.session.user || null
+    next()
+})
+
+app.use(function(req, res, next){
     res.locals.message = req.flash(),
     next()
 })
@@ -35,7 +40,7 @@ app.use(function(req, res, next){
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-    res.render('index', {title: 'Home Page'})
+    res.render('index', {title: 'Home Page', active: 'home'})
 })
 
 app.use('/', authRoutes)

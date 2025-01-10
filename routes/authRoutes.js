@@ -2,31 +2,38 @@ import express from 'express'
 import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
+import { guestRoute, protectedRoute } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.get('/login', (req, res) => {
-    res.render('login', {title: 'Login Page'})
+router.get('/login', guestRoute, (req, res) => {
+    res.render('login', {title: 'Login Page',active: 'login'}) 
 })
 
-router.get('/register', (req, res) => {
-    res.render('register', {title: 'registration Page'})
+router.get('/register',guestRoute, (req, res) => {
+    res.render('register', {title: 'registration Page', active: 'register'})
 })
 
-router.get('/forgot-password', (req, res) => {
-    res.render('forgot-password', {title: 'forgot-password'})
+router.get('/forgot-password',guestRoute, (req, res) => {
+    res.render('forgot-password', {title: 'forgot-password',})
 })
 
 
-router.get('/reset-password', (req, res) => {
+router.get('/reset-password',guestRoute, (req, res) => {
     res.render('reset-password', {title: 'reset-password'})
 })
 
-router.get('/profile', (req, res) => {
-    res.render('profile',  {title: 'Profile Page'})
-})  
+router.get('/profile', protectedRoute, (req, res) => {
+    res.render('profile',  {title: 'Profile Page', active: 'profile'})
+}) 
 
-router.post('/register', async (req, res) => {
+// router.get('/create-post', protectedRoute, (req, res) => {
+//     res.render('create-post', {title: 'Create Post'})
+// })
+
+
+
+router.post('/register', guestRoute,  async (req, res) => {
     const {name, email, password} = req.body
     try {
         const userExists = await User.findOne({email})
@@ -55,7 +62,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', guestRoute, async (req, res) => {
     const {email, password} = req.body
     try {
         const user = await User.findOne({email})
@@ -74,5 +81,12 @@ router.post('/login', async (req, res) => {
         
     }
 })
+
+router.post('/logout', protectedRoute, (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/login')
+    })
+})
+
 
 export default router
