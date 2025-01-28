@@ -1,6 +1,7 @@
 import express from 'express'
 import connectMongoDB from './db.js';
 import authRoutes from './routes/authRoutes.js'
+import postRoutes from './routes/postRoutes.js'
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash'
@@ -39,9 +40,7 @@ app.use(function(req, res, next){
 
 app.set('view engine', 'ejs')
 
-app.get('/', (req, res) => {
-    res.render('index', {title: 'Home Page', active: 'home'})
-})
+app.use('/', postRoutes)
 
 app.use('/', authRoutes)
 

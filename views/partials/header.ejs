@@ -23,7 +23,7 @@
               </li>
               <% if (user) {%>
                 <li class="nav-item">
-                  <a class="nav-link" href="/my-posts">My Posts</a>
+                  <a class="nav-link <%= active == 'profile'?'active':'' %>" href="/my-posts">My Posts</a>
                 </li>
               <% } %>
               <% if (user) {%>
