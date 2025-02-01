@@ -5,6 +5,7 @@ import postRoutes from './routes/postRoutes.js'
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash'
+import path from 'path'
 
 
 const app = express();
@@ -14,6 +15,9 @@ connectMongoDB()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+
+//make uploads folder static
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads') ))
 
 app.use(cookieParser(process.env.COOKIE_SECRET))
 
