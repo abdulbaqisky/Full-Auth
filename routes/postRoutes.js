@@ -4,6 +4,7 @@ import multer from 'multer'
 import path from 'path'
 import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
+import { unlink } from 'fs';
 
 // storage engine using multer
 
@@ -48,9 +49,61 @@ try {
 }
 })
     
-router.get('/edit-post/:id', protectedRoute, (req, res) => {
-    res.render('posts/edit-post', {title: 'Edit Post', active: 'edit-post'})
+router.get('/edit-post/:id', protectedRoute, async(req, res) => {
+    try {
+        const postId = req.params.id
+        const post = await Post.findById(postId)
+        if (!post) {
+            req.flash('error', 'Post not found')
+            res.redirect('/my-posts')
+        }
+        res.render('posts/edit-post', {title: 'Edit Post', active: 'edit-post', post})
+
+    } catch (error) {
+        console.log(error)  
+        req.flash('error', 'An error occured while fetching your post')
+        res.redirect('/my-posts')
+        
+    }
 })
+
+    router.post('/update-post/:id', protectedRoute, upload.single('image'), async (req, res) => {   
+        try {
+            const {title, content} = req.body
+            const postId = req.params.id
+            const post = await Post.findById(postId)
+            if (!post) {
+                req.flash('error', 'Post not found')
+                res.redirect('/my-posts')
+            }
+            post.title = title
+            post.content = content
+            post.slug = title.replace(/\s+/g, '-').toLowerCase()
+
+            
+            if (req.file) {
+                unlink(path.join(process.cwd(), 'uploads')+'/'+ post.image), (err) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                }
+                post.image = req.file.filename
+            }
+        
+            await post.save()
+            req.flash('success', 'Post updated successfully')
+            res.redirect('/my-posts')
+            
+        } catch (error) {   
+            console.log(error)
+            req.flash('error', 'An error occured while updating your post')
+            res.redirect('/my-posts')
+            
+        }
+    }
+)
+
+
 
 router.get('/view-posts/:id', (req, res) => {
     res.render('posts/view-posts', {title: 'View Post', active: 'view-post'})
