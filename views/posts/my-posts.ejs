@@ -38,9 +38,11 @@
                                 </td>
                                 <td><%= post.createdAt.toLocaleDateString() %></td>
                                 <td>
-                                    <a class = "btn btn-sm btn-success" href="/view-posts/<%= post.slug %>">Views</a>
+                                    <a class = "btn btn-sm btn-success" href="/view-posts/<%= post.slug %>">View</a>
                                     <a href="/edit-post/<%= post._id %>" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="/delete-post/<%= post._id %>" class="btn btn-danger btn-sm">Delete</a>
+                                    <form action="/delete-post/<%= post._id %>" method="post" class="d-inline">
+                                        <button class="btn btn-sm btn-danger" type="submit">Deelte</button>
+                                    </form>
                                 </td>
                             </tr>
                             <%

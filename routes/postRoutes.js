@@ -93,7 +93,7 @@ router.get('/edit-post/:id', protectedRoute, async(req, res) => {
             await post.save()
             req.flash('success', 'Post updated successfully')
             res.redirect('/my-posts')
-            
+
         } catch (error) {   
             console.log(error)
             req.flash('error', 'An error occured while updating your post')
@@ -134,5 +134,35 @@ router.post('/create-post', protectedRoute, upload.single('image') , async (req,
     }
     
 })
+
+router.post('/delete-post/:id', protectedRoute, async (req, res) => {
+    try {
+        const postId = req.params.id
+        const post = await Post.findById(postId)
+        if (!post) {
+            req.flash('error', 'Post not found')
+            res.redirect('/my-posts')
+        }
+
+        await User.updateOne({_id: req.session.user._id}, {$pull: {posts: post._id}})
+        await post.deleteOne({_id: postId})
+
+        unlink(path.join(process.cwd(), 'uploads')+'/'+ post.image, (err) => {
+            if (err) {
+                console.error(err)
+            }
+        })
+
+        req.flash('success', 'Post deleted successfully')
+        res.redirect('/my-posts')
+        
+    } catch (error) {
+        console.log(error)
+        req.flash('error', 'An error occured while deleting your post')
+        res.redirect('/my-posts')
+        
+    }
+}
+)
 
 export default router
