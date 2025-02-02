@@ -32,14 +32,15 @@
                            <% posts.forEach((post) => { %>
                             <tr>
                                 <td><%= post.title %></td>
-                                <td><%= post.content %></td>
+                                <td><%= post.content.substring (0,50) %>...</td>
                                 <td>
                                     <img src="uploads/<%= post.image %>" alt=<%= post.title %> class="img-fluid img-thumbnail" width="100">
                                 </td>
-                                <td><%= post.createdAt %></td>
+                                <td><%= post.createdAt.toLocaleDateString() %></td>
                                 <td>
-                                    <a href="/edit-post/1213<%= post._id %>" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="/delete-post    <%= post._id %>" class="btn btn-danger btn-sm">Delete</a>
+                                    <a class = "btn btn-sm btn-success" href="/view-posts/<%= post.slug %>">Views</a>
+                                    <a href="/edit-post/<%= post._id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/delete-post/<%= post._id %>" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                             <%
