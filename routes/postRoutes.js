@@ -26,8 +26,26 @@ router.get('/create-post', protectedRoute, async (req, res) => {
     res.render('posts/create-post', {title: 'Create Post', active: 'create-post'})
 })
 
-router.get('/my-posts', protectedRoute, (req, res) => { 
-    res.render('posts/my-posts', {title: 'My Posts', active: 'my-posts'})
+router.get('/my-posts', protectedRoute, async (req, res) => { 
+    
+try {
+    const userId = req.session.user._id
+    const user = await User.findById(userId).populate('posts')
+
+    if (!user) {
+        req.flash('error', 'User not found')
+        res.redirect('/')
+    }
+
+    res.render('posts/my-posts', {title: 'My Posts', active: 'my-posts', posts: user.posts})
+
+    
+} catch (error) {
+    console.log(error) 
+    req.flash('error', 'An error occured while fetching your post') 
+    res.redirect('/my-posts')
+    
+}
 })
     
 router.get('/edit-post/:id', protectedRoute, (req, res) => {

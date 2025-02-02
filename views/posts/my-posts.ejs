@@ -29,17 +29,22 @@
                             </tr>
                         </thead>
                         <tbody>
+                           <% posts.forEach((post) => { %>
                             <tr>
-                                <td>Post Title</td>
-                                <td>Post Content</td>
-                                <td>Post Image</td>
-                                <td>Post Created At</td>
+                                <td><%= post.title %></td>
+                                <td><%= post.content %></td>
                                 <td>
-                                    <a href="/edit-post" class="btn btn btn-sm btn-primary">Edit</a>
-                                    <a href="/delete-post" class="btn btn-danger btn-sm">Delete</a>
+                                    <img src="uploads/<%= post.image %>" alt=<%= post.title %> class="img-fluid img-thumbnail" width="100">
                                 </td>
-
+                                <td><%= post.createdAt %></td>
+                                <td>
+                                    <a href="/edit-post/1213<%= post._id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/delete-post    <%= post._id %>" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
                             </tr>
+                            <%
+                            
+                           }); %> 
                         </tbody>
 
                     </table>
