@@ -105,8 +105,25 @@ router.get('/edit-post/:id', protectedRoute, async(req, res) => {
 
 
 
-router.get('/view-posts/:id', (req, res) => {
-    res.render('posts/view-posts', {title: 'View Post', active: 'view-post'})
+router.get('/view-posts/:slug', async (req, res) => {
+    try {
+        const slug = req.params.slug
+        const post = await Post.findOne({slug}).populate('user')
+        
+        if (!post) {
+            req.flash('error', 'Post not found')
+            return res.redirect('/my-posts')
+        }
+
+        res.render('posts/view-posts', {title: 'View Post', active: 'view-post', post})
+
+    } catch (error) {
+        console.log(error)
+        req.flash('error', 'An error occured while fetching your post')
+        res.redirect('/my-posts')
+        
+    }
+    
 })
 
 router.post('/create-post', protectedRoute, upload.single('image') , async (req, res) => {

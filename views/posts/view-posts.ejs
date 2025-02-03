@@ -4,14 +4,13 @@
         <div class="col-lg-10 mx-auto">
             <div class="card shadow">
                 <div class="card-body p-5">
-                    <img src="https://wallpapercat.com/w/full/1/d/3/5818397.jpg" class="img-fluid" alt="wallpaper">
+                    <img src="/uploads/<%= post.image %>" class="img-fluid" alt="<%= post.title %>">    
                     <div class="lead my-3 d-flex fw-semibold justify-content-between align-items-center text-secondary flex-wrap gap-2">
-                        <div>Author: Abdulbaqi Adekomi</div>
-                        <div>Created: 29-01-2025</div>
+                        <div>Author: <%= post.user.name %> </div>
+                        <div>Created: <%= post.createdAt.toLocaleDateString() %> </div>
                     </div>
-                        <h1 class="fw-bold text-secondary">Post Title</h1>
-                        <p class="text-secondary">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis esse in sequi aut eius nulla id, et porro vero aliquam earum voluptatibus quam quibusdam nobis ducimus itaque excepturi atque quidem.
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nobis architecto distinctio similique fugit dolores, magni molestiae, fuga eum nostrum tempora eius. Soluta reprehenderit maiores architecto temporibus iure nisi fugiat Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit culpa veniam vero doloribus voluptates officia id quod neque perspiciatis, quas aliquid hic labore quibusdam ipsa ea nesciunt quidem. Excepturi, similique?
+                        <h1 class="fw-bold text-secondary"><%= post.title %></h1>
+                        <p class="text-secondary"><%= post.content %></p>
                         </p>
                 </div>
             </div>    
