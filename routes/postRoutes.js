@@ -20,8 +20,31 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    res.render('index', {title: 'Home Page', active: 'home'})
+router.get('/', async (req, res) => {
+    const page =  parseInt(req.query.page) || 1
+    const limit = 2
+
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+
+    const totalPosts = await Post.countDocuments().exec()
+
+    const posts = await Post.find()
+    .populate({path: 'user', select: '-password'})
+    .sort({_id: -1})
+    .limit(limit)
+    .skip(startIndex)
+    .exec()
+
+    const pagination = {
+        currentPage: page,
+        totalPages: Math.ceil(totalPosts / limit),
+        hasNextPage: endIndex < totalPosts,
+        hasPreviousPage: page > 0,
+        nextPage: page + 1,
+        prevpage: page - 1
+    }
+    res.render('index', {title: 'Home Page', active: 'home',posts, pagination })
 })
 router.get('/create-post', protectedRoute, async (req, res) => {
     res.render('posts/create-post', {title: 'Create Post', active: 'create-post'})
@@ -109,7 +132,7 @@ router.get('/view-posts/:slug', async (req, res) => {
     try {
         const slug = req.params.slug
         const post = await Post.findOne({slug}).populate('user')
-        
+
         if (!post) {
             req.flash('error', 'Post not found')
             return res.redirect('/my-posts')
