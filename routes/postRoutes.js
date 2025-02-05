@@ -22,7 +22,7 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
     const page =  parseInt(req.query.page) || 1
-    const limit = 2
+    const limit = 4
 
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 
     const pagination = {
         currentPage: page,
-        totalPages: Math.ceil(totalPosts / limit),
+        totalPage: Math.ceil(totalPosts / limit),
         hasNextPage: endIndex < totalPosts,
         hasPreviousPage: page > 0,
         nextPage: page + 1,
@@ -46,6 +46,7 @@ router.get('/', async (req, res) => {
     }
     res.render('index', {title: 'Home Page', active: 'home',posts, pagination })
 })
+
 router.get('/create-post', protectedRoute, async (req, res) => {
     res.render('posts/create-post', {title: 'Create Post', active: 'create-post'})
 })

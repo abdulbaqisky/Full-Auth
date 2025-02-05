@@ -1,31 +1,29 @@
 <%- include('partials/header') %>
 <div class="container my-4">
     <div class="row g-4">
-        
         <% posts.forEach((post) => { %>
             <div class="col-lg-6">
                 <div class="card shadow">
                     <img src="/uploads/<%= post.image %>" alt="<%= post.title %>" class="img-fluid card-img-top">
                     <div class="card-body p-4">
-                        <h2 class = "card-title fw-bold text-secondary">Create New Post</h2>
+                        <h2 class = "card-title fw-bold text-secondary"><%= post.title %></h2>
                         <p class="card-text">
-                            <%= post.content.substring(0, 200)%>...
+                            <%= post.content.substring(0, 200) %>...
                         </p>
                         <div>
-                            <a href="/view-posts/<%= post.slug %>" class="btn btn-primary">Read More</a>
+                            <a href="/view-posts/21313" class="btn btn-primary">Read More</a>
                         </div>
                     
                 </div> 
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>Author: <%= post.user.name %> </div>
-                        <div>Created: <%= post.user.createdAt.toLocaleDateString() %></div>
+                        <div>Created: <%= post.createdAt.toLocaleDateString() %> </div>
                     </div>
                 </div>   
                 </div>
-                <% })%>
-            
             </div>
-        
+        <%  }); %>
+
 </div>
 <%- include('partials/footer') %>
