@@ -31,8 +31,9 @@
                     <a href="/?page=<%= pagination.prevPage %>" class="btn btn-secondary">Previous
                     </a>
                 </div>
-                </div>
                 <% } %>
+
+                <span> Page <%= pagination.currentPage %> of <%= pagination.totalPage %></span>
         
             <% if(pagination.hasNextPage) { %>
                 <div>
