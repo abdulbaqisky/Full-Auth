@@ -24,6 +24,24 @@
                 </div>
             </div>
         <%  }); %>
+        </div>
+        <div class="my-4 float-end d-inline-flex align-items-center gap-4">
+            <% if(pagination.hasPreviousPage) { %>
+                <div>
+                    <a href="/?page=<%= pagination.prevPage %>" class="btn btn-secondary">Previous
+                    </a>
+                </div>
+                </div>
+                <% } %>
+        
+            <% if(pagination.hasNextPage) { %>
+                <div>
+                    <a href="/?page=<%= pagination.nextPage %>" class="btn btn-secondary">Next</a>
+                </div>
+                <% } %>
+                
+        </div>
+
 
 </div>
 <%- include('partials/footer') %>
