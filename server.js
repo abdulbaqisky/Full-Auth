@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash'
 import path from 'path'
+import ConnectMongoDBSession from 'connect-mongodb-session';
+const connectMongoDBStore = ConnectMongoDBSession(session)
 
 
 const app = express();
@@ -27,7 +29,13 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60000 * 60 * 24 * 7 // 1 week
-    }
+        
+    },
+    store: new connectMongoDBStore({
+        uri: process.env.MONGO_DB_URI,
+        collection: 'sessions'  
+    })
+    
 }))
 
 app.use(flash())
